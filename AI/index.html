@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>CloudEva — Your Cloud Has an AI Advisor Now</title>
+<meta name="description" content="Ask EVA what changed, why it matters, and what to decide. An AI reasoning engine for your cloud.">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--teal:#06C2AC;--dk:#060B18;--dk2:#0A1128;--amber:#E08A50;--red:#E05050;--purple:#8B6BFF;--w:#fff;--t1:#e2e8f0;--t2:#94a3b8;--t3:#64748b;--bdr:#1a2a44;--ff-d:'Sora',sans-serif;--ff-b:'Outfit',sans-serif;--ff-m:'JetBrains Mono',monospace}
+body{font-family:var(--ff-b);background:var(--dk);color:var(--w);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+::selection{background:rgba(6,194,172,.25)}
+
+.nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:14px 5%;display:flex;align-items:center;gap:16px;background:rgba(6,11,24,.88);backdrop-filter:blur(24px);border-bottom:1px solid rgba(26,42,68,.4)}
+.logo{}
+.tag{font-family:var(--ff-m);font-size:9px;padding:3px 10px;border-radius:5px;background:rgba(139,107,255,.1);color:var(--purple);letter-spacing:.5px;text-transform:uppercase}
+.nav-r{margin-left:auto;display:flex;align-items:center;gap:12px}
+.nav-link{font-size:13px;color:var(--t2);text-decoration:none;transition:.15s}.nav-link:hover{color:var(--teal)}
+.btn{font-family:var(--ff-d);font-weight:700;border-radius:10px;text-decoration:none;cursor:pointer;transition:.2s;border:none;display:inline-flex;align-items:center;gap:6px}
+.btn-p{font-size:13px;padding:10px 22px;background:linear-gradient(135deg,var(--teal),#048a7a);color:var(--dk)}
+.btn-p:hover{box-shadow:0 4px 28px rgba(6,194,172,.3);transform:translateY(-1px)}
+.btn-g{font-size:14px;padding:13px 30px;border:1.5px solid var(--bdr);color:var(--t2);background:transparent}
+.btn-g:hover{border-color:var(--teal);color:var(--teal)}
+.btn-lg{font-size:15px;padding:15px 36px}
+
+/* HERO — centered, EVA-focused */
+.hero{min-height:100vh;display:flex;align-items:center;justify-content:center;text-align:center;padding:120px 5% 60px;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:900px;height:900px;background:radial-gradient(circle,rgba(6,194,172,.05) 0%,transparent 55%);pointer-events:none}
+.hero-content{max-width:700px;position:relative;z-index:2}
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+.badge{display:inline-flex;align-items:center;gap:8px;font-family:var(--ff-m);font-size:11px;padding:6px 16px;border-radius:20px;background:rgba(6,194,172,.07);border:1px solid rgba(6,194,172,.2);color:var(--teal);margin-bottom:24px;animation:fadeUp .5s ease both}
+.badge .dot{width:6px;height:6px;border-radius:50%;background:var(--teal);animation:pulse 2s infinite}
+.hero h1{font-family:var(--ff-d);font-size:clamp(34px,5vw,60px);font-weight:800;line-height:1.08;margin-bottom:20px;animation:fadeUp .5s ease .1s both}
+.hl{background:linear-gradient(135deg,var(--purple),var(--teal));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.hero-sub{font-size:17px;color:var(--t2);line-height:1.7;max-width:540px;margin:0 auto 36px;animation:fadeUp .5s ease .2s both}
+.hero-ctas{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;animation:fadeUp .5s ease .3s both}
+
+/* CHAT DEMO STRIP */
+.chat-strip{padding:60px 5%;background:var(--dk2);border-top:1px solid var(--bdr);border-bottom:1px solid var(--bdr)}
+.chat-inner{max-width:640px;margin:0 auto}
+.chat-q,.chat-a{border-radius:14px;padding:16px 20px;margin-bottom:12px;font-size:14px;line-height:1.7}
+.chat-q{background:rgba(139,107,255,.06);border:1px solid rgba(139,107,255,.15);color:var(--t1);text-align:right}
+.chat-q::before{content:'You';display:block;font-family:var(--ff-m);font-size:9px;color:var(--purple);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px}
+.chat-a{background:rgba(6,194,172,.04);border:1px solid rgba(6,194,172,.12);color:var(--t2)}
+.chat-a::before{content:'EVA Advisor';display:block;font-family:var(--ff-m);font-size:9px;color:var(--teal);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px}
+.chat-a strong{color:var(--teal);font-weight:600}
+.chat-a em{color:var(--amber);font-style:normal;font-weight:500}
+
+/* EVA STAGES */
+.sec{padding:80px 5%}
+.sec-inner{max-width:1100px;margin:0 auto}
+.sec-title{font-family:var(--ff-d);font-size:clamp(24px,3vw,36px);font-weight:700;margin-bottom:10px;text-align:center}
+.sec-sub{font-size:15px;color:var(--t2);text-align:center;max-width:540px;margin:0 auto 48px;line-height:1.7}
+.stages{display:grid;grid-template-columns:repeat(3,1fr);gap:0;max-width:960px;margin:0 auto}
+.stage{padding:32px 28px;border:1px solid var(--bdr);text-align:center;position:relative}
+.stage:first-child{border-radius:14px 0 0 14px}.stage:last-child{border-radius:0 14px 14px 0}
+.stage-num{font-family:var(--ff-d);font-size:48px;font-weight:800;margin-bottom:4px}
+.stage:nth-child(1) .stage-num{color:var(--teal)}.stage:nth-child(2) .stage-num{color:var(--amber)}.stage:nth-child(3) .stage-num{color:var(--purple)}
+.stage-name{font-family:var(--ff-d);font-size:16px;font-weight:700;margin-bottom:6px}
+.stage-desc{font-size:13px;color:var(--t2);line-height:1.6}
+.stage-plan{font-family:var(--ff-m);font-size:9px;margin-top:12px;padding:3px 8px;border-radius:4px;display:inline-block;background:rgba(6,194,172,.07);color:var(--teal)}
+.stage-arrow{position:absolute;right:-14px;top:50%;transform:translateY(-50%);font-size:20px;color:var(--t3);z-index:2}
+
+/* PROOF */
+.proof{padding:48px 5%;border-top:1px solid var(--bdr);border-bottom:1px solid var(--bdr);background:var(--dk2)}
+.proof-grid{max-width:800px;margin:0 auto;display:flex;justify-content:center;gap:48px;flex-wrap:wrap;text-align:center}
+.pv{font-family:var(--ff-d);font-size:34px;font-weight:800;color:var(--teal)}
+.pl{font-family:var(--ff-m);font-size:10px;color:var(--t3);text-transform:uppercase;letter-spacing:.5px;margin-top:3px}
+
+/* PRICING */
+.plans{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.plan{background:var(--dk2);border:1px solid var(--bdr);border-radius:16px;padding:28px 24px;position:relative;transition:.2s}.plan:hover{border-color:rgba(6,194,172,.2)}
+.plan.pop{border-color:rgba(6,194,172,.4);box-shadow:0 0 0 1px rgba(6,194,172,.15),0 12px 48px rgba(6,194,172,.06)}
+.plan-tag{position:absolute;top:-11px;right:20px;font-family:var(--ff-m);font-size:9px;padding:4px 14px;border-radius:6px;background:var(--teal);color:var(--dk);font-weight:600}
+.plan-name{font-family:var(--ff-d);font-size:18px;font-weight:700;margin-bottom:4px}
+.plan-meta{font-family:var(--ff-m);font-size:10px;color:var(--t3);margin-bottom:14px}
+.plan-price{font-family:var(--ff-d);font-size:42px;font-weight:800;margin-bottom:3px}.plan-price span{font-size:15px;font-weight:500;color:var(--t2)}
+.plan-note{font-family:var(--ff-m);font-size:10px;color:var(--t3);margin-bottom:18px}
+.plan-feats{list-style:none;margin-bottom:22px}
+.plan-feats li{font-size:13px;color:var(--t2);padding:5px 0 5px 18px;position:relative;border-bottom:1px solid rgba(26,42,68,.3)}
+.plan-feats li::before{content:'✓';position:absolute;left:0;color:var(--teal);font-weight:700;font-size:12px}
+.plan-feats li:last-child{border-bottom:none}
+.plan-cta{display:block;width:100%;padding:12px;border-radius:10px;font-family:var(--ff-d);font-size:13px;font-weight:700;text-align:center;text-decoration:none;cursor:pointer;transition:.2s}
+.plan-cta.primary{background:linear-gradient(135deg,var(--teal),#048a7a);color:var(--dk);border:none}
+.plan-cta.outline{background:transparent;border:1.5px solid var(--bdr);color:var(--t2)}
+.plan-cta:hover{transform:translateY(-1px)}
+.plan-free{font-family:var(--ff-m);font-size:9px;text-align:center;margin-top:10px;color:var(--teal)}
+
+.cta-sec{padding:80px 5%;text-align:center;background:linear-gradient(135deg,rgba(139,107,255,.03),rgba(6,194,172,.03))}
+.cta-sec h2{font-family:var(--ff-d);font-size:clamp(24px,3.5vw,40px);font-weight:800;margin-bottom:14px}
+.cta-sec p{color:var(--t2);font-size:16px;margin-bottom:28px;max-width:480px;margin-left:auto;margin-right:auto}
+footer{padding:28px 5%;text-align:center;font-size:12px;color:var(--t3);border-top:1px solid var(--bdr)}footer a{color:var(--teal);text-decoration:none}
+
+@media(max-width:900px){.stages,.plans{grid-template-columns:1fr}.stage{border-radius:0!important}.stage:first-child{border-radius:14px 14px 0 0!important}.stage:last-child{border-radius:0 0 14px 14px!important}.stage-arrow{display:none}}
+@media(max-width:640px){.nav{padding:12px 4%}.sec{padding:60px 4%}.nav-link{display:none}}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="logo"><img src="Logo.png" alt="CloudEva" style="height:85px;width:auto;display:block;"></div>
+  <span class="tag">Variant B · AI-Led</span>
+  <div class="nav-r">
+    <a href="#eva" class="nav-link">EVA Advisor</a>
+    <a href="#pricing" class="nav-link">Pricing</a>
+    <a href="https://app.cloudeva.ai/auth/register" class="btn btn-p">Start Free Preview →</a>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="hero-content">
+    <div class="badge"><span class="dot"></span>Public Preview — Pro features free</div>
+    <h1>Your Cloud Has an<br><span class="hl">AI Advisor</span> Now.</h1>
+    <p class="hero-sub">Ask EVA what changed overnight, why cost spiked, and whether that security finding is real. Get plain English answers grounded in your actual cloud data — not generic recommendations.</p>
+    <div class="hero-ctas">
+      <a href="https://app.cloudeva.ai/auth/register" class="btn btn-p btn-lg">Talk to EVA Free →</a>
+      <a href="#eva" class="btn btn-g">See How EVA Works</a>
+    </div>
+  </div>
+</section>
+
+<!-- CHAT DEMO -->
+<section class="chat-strip" id="eva">
+  <div class="chat-inner">
+    <div class="chat-q">What changed in prod overnight?</div>
+    <div class="chat-a"><strong>3 inventory changes</strong> detected in <em>us-east-1</em> between 01:14–03:47 AM. 2 new EC2 instances launched (r5.2xlarge) by role <em>deploy-automation</em>. This was <strong>outside your deployment window</strong>. Estimated daily cost impact: <strong>+$38.40</strong>. One related security finding: SG allowing 0.0.0.0/0 on port 22 attached to the new instances.</div>
+    <div class="chat-q">Is this related to yesterday's cost spike?</div>
+    <div class="chat-a"><strong>Yes — high correlation.</strong> Yesterday's 23% compute cost spike aligns with these r5.2xlarge launches. The instances are running idle (<em>avg CPU: 2.1%</em>). Recommendation: review with the deploy team. If not needed, terminate to save <strong>~$1,152/month</strong>. Confidence: <em>Proceed</em>.</div>
+  </div>
+</section>
+
+<!-- EVA STAGES -->
+<section class="sec">
+  <div class="sec-inner">
+    <div class="sec-title">Three Stages of Intelligence</div>
+    <div class="sec-sub">EVA matures with your plan. Each stage adds deeper reasoning capabilities.</div>
+    <div class="stages">
+      <div class="stage">
+        <div class="stage-num">E</div>
+        <div class="stage-name">Explain</div>
+        <div class="stage-desc">What changed? Who changed it? When? EVA reads your signals and tells you in plain English.</div>
+        <div class="stage-plan">Starter — $49/mo</div>
+        <div class="stage-arrow">→</div>
+      </div>
+      <div class="stage">
+        <div class="stage-num">V</div>
+        <div class="stage-name">Verify</div>
+        <div class="stage-desc">Is this real? How does it compare to baseline? EVA confirms intent against historical patterns.</div>
+        <div class="stage-plan">Growth — $122/mo</div>
+        <div class="stage-arrow">→</div>
+      </div>
+      <div class="stage">
+        <div class="stage-num">A</div>
+        <div class="stage-name">Advise</div>
+        <div class="stage-desc">What should you do? EVA frames trade-offs, scores confidence, and auto-proposes decisions for your review.</div>
+        <div class="stage-plan">Pro — $289/mo</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="proof">
+  <div class="proof-grid">
+    <div><div class="pv">25+</div><div class="pl">Years Cloud Expertise</div></div>
+    <div><div class="pv">650+</div><div class="pl">Enterprise Setups via Rapyder</div></div>
+    <div><div class="pv">10K+</div><div class="pl">Hours AI Engineering</div></div>
+    <div><div class="pv">3</div><div class="pl">EVA Stages: E → V → A</div></div>
+  </div>
+</section>
+
+<section class="sec" id="pricing">
+  <div class="sec-inner">
+    <div class="sec-title">Try Pro Free. Keep What You Need.</div>
+    <div class="sec-sub">Public Preview unlocks all EVA stages at no cost. Choose your plan when you're ready.</div>
+    <div class="plans">
+      <div class="plan">
+        <div class="plan-name">Starter</div>
+        <div class="plan-meta">1–2 accounts · 1 user · 30 credits/mo</div>
+        <div class="plan-price">$49<span>/mo</span></div>
+        <div class="plan-note">Billed annually</div>
+        <ul class="plan-feats"><li>EVA Explain</li><li>Signal dashboard</li><li>Change visibility</li><li>AWS · Azure · GCP</li></ul>
+        <a href="https://app.cloudeva.ai/auth/register" class="plan-cta outline">Start Free</a>
+      </div>
+      <div class="plan pop">
+        <div class="plan-tag">✦ PUBLIC PREVIEW — FREE</div>
+        <div class="plan-name">Pro</div>
+        <div class="plan-meta">Up to 15 accounts · 10 users · 200 credits/mo</div>
+        <div class="plan-price">$289<span>/mo</span></div>
+        <div class="plan-note">Billed annually · Free during preview</div>
+        <ul class="plan-feats"><li>EVA Explain + Verify + Advise</li><li>Auto-proposed decisions</li><li>Confidence scoring</li><li>MBR/QBR reviews</li><li>Outcome tracking</li><li>Deployment windows</li><li>Full API access</li></ul>
+        <a href="https://app.cloudeva.ai/auth/register" class="plan-cta primary">Talk to EVA Free →</a>
+        <div class="plan-free">All 3 EVA stages free during preview</div>
+      </div>
+      <div class="plan">
+        <div class="plan-name">Growth</div>
+        <div class="plan-meta">Up to 5 accounts · 3 users · 75 credits/mo</div>
+        <div class="plan-price">$122<span>/mo</span></div>
+        <div class="plan-note">Billed annually</div>
+        <ul class="plan-feats"><li>EVA Explain + Verify</li><li>Multi-account correlation</li><li>Advisory recommendations</li><li>Cloud Health Score</li></ul>
+        <a href="https://app.cloudeva.ai/auth/register" class="plan-cta outline">Start Free</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="cta-sec">
+  <h2>Ask Your Cloud<br>a <span class="hl">Question.</span></h2>
+  <p>Connect AWS in 5 minutes. Ask EVA your first question before your stand-up.</p>
+  <a href="https://app.cloudeva.ai/auth/register" class="btn btn-p btn-lg">Talk to EVA Free →</a>
+</section>
+
+<footer>© 2025 CloudEva by Rapyder Cloud Solutions · <a href="https://cloudeva.ai">cloudeva.ai</a> · Not a chatbot. A reasoning advisor with your data.</footer>
+</body>
+</html>
